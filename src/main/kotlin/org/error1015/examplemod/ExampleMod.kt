@@ -11,8 +11,8 @@ import net.neoforged.fml.common.Mod
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.error1015.examplemod.block.ModBlocks
-import org.error1015.examplemod.items.ModItems
+import org.error1015.examplemod.block.ModBlocks.BLOCKS
+import org.error1015.examplemod.items.ModItems.ITEMS
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import kotlin.time.Duration.Companion.seconds as secondsDuration
 
@@ -20,26 +20,21 @@ const val MODID = "examplemod"
 
 @Mod(MODID)
 object ExampleMod {
+    val logger: Logger = LogManager.getLogger("$MODID-Main")
+
+    val testObject = MySerializedThing(name = "ExampleMod", version = "1.0.0")
+    val json = Json.encodeToString(testObject)
+    val scope = CoroutineScope(Dispatchers.Default)
+
     init {
-        val logger: Logger = LogManager.getLogger("$MODID-Main")
-        initResource()
+        ITEMS.register(MOD_BUS)
+        BLOCKS.register(MOD_BUS)
 
-        val testObject = MySerializedThing(name = "ExampleMod", version = "1.0.0")
-        val json = Json.encodeToString(testObject)
-
-        logger.log(Level.INFO, "--- JSON: $json")
-
-        // 这是协程代码示例
-        CoroutineScope(Dispatchers.Default).launch {
-            logger.log(Level.INFO, "Before delay")
+        scope.launch {
+            logger.log(Level.INFO, "$MODID Runs Successfully!!")
             delay(5.secondsDuration)
-            logger.log(Level.INFO, "After 5 seconds")
+            logger.log(Level.INFO, "--- JSON: $json")
         }
-    }
-
-    fun initResource() {
-        ModItems.ITEMS.register(MOD_BUS)
-        ModBlocks.BLOCKS.register(MOD_BUS)
     }
 }
 
