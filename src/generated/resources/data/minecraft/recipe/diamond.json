@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:stone"
+    }
+  },
+  "pattern": [
+    "A",
+    "A",
+    "A"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minecraft:diamond"
+  }
+}
