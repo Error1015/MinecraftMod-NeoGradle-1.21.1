@@ -2,7 +2,6 @@ plugins {
     `java-library`
     idea
     `maven-publish`
-    // id("net.neoforged.moddev") version "1.0.11"
     id("net.neoforged.gradle.userdev") version "7.0.184"
     kotlin("jvm") version "2.1.10"
     kotlin("plugin.serialization") version "2.1.10"
@@ -37,7 +36,7 @@ runs {
     create("server") {
         server()
         workingDirectory(file("run/server"))
-        programArgument("--nogui")
+        // programArgument("--nogui")
         systemProperty("neoforge.enabledGameTestNamespaces", modid)
         modSource(sourceSets.main.get())
     }
