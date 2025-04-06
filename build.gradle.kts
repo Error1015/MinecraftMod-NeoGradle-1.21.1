@@ -21,7 +21,7 @@ val mcVersionRange = project.property("minecraft_version_range") as String
 val neoVersion = project.property("neo_version") as String
 val neoVersionRange = project.property("neo_version_range") as String
 val loaderVersionRange = project.property("loader_version_range") as String
-val parchmentVersion =  project.property("parchment_version") as String
+val parchmentVersion = project.property("parchment_version") as String
 // 依赖信息
 val kffVersion = "5.7.0"
 
