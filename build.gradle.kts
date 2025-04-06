@@ -103,12 +103,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-
 kotlin {
     jvmToolchain(21)
 
     compilerOptions {
-        freeCompilerArgs.add("-Xwhen-guards") // 使用When表达式的if语句
+        freeCompilerArgs.add("-Xwhen-guards") // 使用When的预览功能
     }
 }
 
