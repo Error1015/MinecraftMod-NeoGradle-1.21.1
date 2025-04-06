@@ -7,17 +7,33 @@ plugins {
     kotlin("plugin.serialization") version "2.1.10"
 }
 
-version = project.property("mod_version") as String
-group = project.property("mod_group_id") as String
+// Mod信息
+val modName = project.property("mod_name") as String
+val modVersion = project.property("mod_version") as String
+val modGroup = project.property("mod_group_id") as String
+val modId = project.property("mod_id") as String
+val modLicense = project.property("mod_license") as String
+val modAuthors = project.property("mod_authors") as String
+val modDescription = project.property("mod_description") as String
+// 基本环境
+val mcVersion = project.property("minecraft_version") as String
+val mcVersionRange = project.property("minecraft_version_range") as String
+val neoVersion = project.property("neo_version") as String
+val neoVersionRange = project.property("neo_version_range") as String
+val loaderVersionRange = project.property("loader_version_range") as String
+val parchmentVersion =  project.property("parchment_version") as String
+// 依赖信息
+val kffVersion = "5.7.0"
+
+version = modVersion
+group = modGroup
 
 base {
-    archivesName = project.property("mod_name") as String
+    archivesName = modName
 }
 
-val modid = project.property("mod_id") as String
-
 minecraft {
-    version = project.property("minecraft_version") as String
+    version = mcVersion
     // accessTransformers.file("src/main/resources/META-INF/accesstransformer.cfg")
 }
 
@@ -37,14 +53,14 @@ runs {
         server()
         workingDirectory(file("run/server"))
         // programArgument("--nogui")
-        systemProperty("neoforge.enabledGameTestNamespaces", modid)
+        systemProperty("neoforge.enabledGameTestNamespaces", modId)
         modSource(sourceSets.main.get())
     }
 
     create("gameTestServer") {
         gameTest()
         workingDirectory(file("run/server"))
-        systemProperty("neoforge.enabledGameTestNamespaces", modid)
+        systemProperty("neoforge.enabledGameTestNamespaces", modId)
         modSource(sourceSets.main.get())
     }
 
@@ -53,7 +69,7 @@ runs {
         workingDirectory(file("run"))
         programArguments.addAll(
             "--mod",
-            modid,
+            modId,
             "--all",
             "--output",
             file("src/generated/resources/").absolutePath,
@@ -66,8 +82,8 @@ runs {
 
 subsystems {
     parchment {
-        minecraftVersion = project.property("minecraft_version") as String
-        mappingsVersion = project.property("parchment_version") as String
+        minecraftVersion = mcVersion
+        mappingsVersion = parchmentVersion
     }
 }
 
@@ -109,23 +125,23 @@ repositories {
 }
 
 dependencies {
-    implementation("net.neoforged:neoforge:${property("neo_version")}")
-    implementation("thedarkcolour:kotlinforforge-neoforge:${property("kff_version")}")
+    implementation("net.neoforged:neoforge:$neoVersion")
+    implementation("thedarkcolour:kotlinforforge-neoforge:$kffVersion")
 }
 
 tasks.withType<ProcessResources>().configureEach {
     val replaceProperties = mapOf(
-        "minecraft_version" to project.property("minecraft_version") as String,
-        "minecraft_version_range" to project.property("minecraft_version_range") as String,
-        "neo_version" to project.property("neo_version") as String,
-        "neo_version_range" to project.property("neo_version_range") as String,
-        "loader_version_range" to project.property("loader_version_range") as String,
-        "mod_id" to modid,
-        "mod_name" to project.property("mod_name") as String,
-        "mod_license" to project.property("mod_license") as String,
-        "mod_version" to project.property("mod_version") as String,
-        "mod_authors" to project.property("mod_authors") as String,
-        "mod_description" to project.property("mod_description") as String
+        "minecraft_version" to mcVersion,
+        "minecraft_version_range" to mcVersionRange,
+        "neo_version" to neoVersion,
+        "neo_version_range" to neoVersionRange,
+        "loader_version_range" to loaderVersionRange,
+        "mod_id" to modId,
+        "mod_name" to modName,
+        "mod_license" to modLicense,
+        "mod_version" to modVersion,
+        "mod_authors" to modAuthors,
+        "mod_description" to modDescription
     )
     inputs.properties(replaceProperties)
 
@@ -136,7 +152,7 @@ tasks.withType<ProcessResources>().configureEach {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("mavenKotlin") {
             from(components["kotlin"])
         }
     }
