@@ -2,7 +2,6 @@ package org.error1015.examplemod.event
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -10,15 +9,12 @@ import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Slime
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.ClientTickEvent
-import net.neoforged.neoforge.common.NeoForgeMod
-import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.living.MobSplitEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
@@ -102,18 +98,14 @@ object ForgeEventHandler {
 
     /**
      * 禁止史莱姆分裂
-     * 同时把其他分裂的生物的生命值设为1
      */
     @SubscribeEvent
     fun onMobSplit(event: MobSplitEvent) {
         if (event.parent.level.isClientSide) {
             return
         }
-
         if (event.parent is Slime) {
             event.isCanceled = true
-        } else {
-            event.children.map { it.health = 1f }
         }
     }
 }

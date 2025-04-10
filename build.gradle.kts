@@ -80,25 +80,15 @@ runs {
     }
 }
 
-subsystems {
-    parchment {
-        minecraftVersion = mcVersion
-        mappingsVersion = parchmentVersion
-    }
+subsystems.parchment {
+    minecraftVersion = mcVersion
+    mappingsVersion = parchmentVersion
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir("src/generated/resources")
-        }
-    }
-}
+sourceSets.main.get().resources.srcDir("src/generated/resources")
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 }
@@ -107,20 +97,15 @@ kotlin {
     jvmToolchain(21)
 
     compilerOptions {
-        freeCompilerArgs.add("-Xwhen-guards") // 使用When的预览功能
+        freeCompilerArgs.add("-Xwhen-guards") // when的卫语句
     }
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://thedarkcolour.github.io/KotlinForForge/") {
-        name = "Kotlin For Forge"
-        content {
-            includeGroup("thedarkcolour")
-        }
-    }
-    maven("https://bmclapi2.bangbang93.com/maven") { name = "BMCL" }
+    mavenKff
+    mavenBmcl
 }
 
 dependencies {
