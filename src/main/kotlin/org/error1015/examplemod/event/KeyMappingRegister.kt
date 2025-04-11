@@ -11,12 +11,12 @@ import org.lwjgl.glfw.GLFW
 
 @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 object KeyMappingRegister {
-    val exampleKeyMapping by lazy {
-        KeyMapping("example_key_mapping", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, "examplemod_keymappings")
+    val playerFlyMode by lazy {
+        KeyMapping("player_fly_mode", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, "examplemod_keymappings")
     }
 
     @SubscribeEvent
     fun registerKeyMappings(event: RegisterKeyMappingsEvent) {
-        event.register(exampleKeyMapping)
+        event.register(playerFlyMode)
     }
 }

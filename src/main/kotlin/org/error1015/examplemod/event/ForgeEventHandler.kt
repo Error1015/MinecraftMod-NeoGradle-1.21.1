@@ -1,7 +1,14 @@
 package org.error1015.examplemod.event
 
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -14,20 +21,30 @@ import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.client.event.ClientChatEvent
 import net.neoforged.neoforge.client.event.ClientTickEvent
+import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.living.MobSplitEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.tick.EntityTickEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import org.error1015.examplemod.MODID
-import org.error1015.examplemod.event.KeyMappingRegister.exampleKeyMapping
+import org.error1015.examplemod.event.KeyMappingRegister.playerFlyMode
+import org.error1015.examplemod.network.packets.ExamplePackets
 import org.error1015.examplemod.network.packets.PlayerAbilityPacket
 import org.error1015.examplemod.utils.*
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.toVec3
+import kotlin.time.Duration.Companion.seconds
 
 @EventBusSubscriber(modid = MODID)
 object ForgeEventHandler {
+    val scope = CoroutineScope(
+        SupervisorJob() + CoroutineExceptionHandler { _, exc ->
+            println("发生异常: $exc")
+            exc.printStackTrace()
+        })
+
     /**
      * 添加酿造台配方
      */
@@ -37,16 +54,26 @@ object ForgeEventHandler {
         builder.addMix(Potions.NIGHT_VISION, Items.DIAMOND, Potions.LUCK)
     }
 
+    @SubscribeEvent
+    fun onClientChat(event: ClientChatEvent) {
+        scope.launch {
+            delay(1.seconds)
+            PacketDistributor.sendToServer(ExamplePackets(event.message, event.message.length, event.isCanceled))
+        }
+    }
+
     /**
      * 检测客户端按键点击
-     * 检测到按键点击时切换玩家创造飞行模式
-     * 发送玩家能力包到服务器
      */
     @SubscribeEvent
     fun onClientTick(event: ClientTickEvent.Post) {
-        while (exampleKeyMapping.consumeClick()) {
-            Minecraft.getInstance().player?.let { player: LocalPlayer ->
-                PacketDistributor.sendToServer(PlayerAbilityPacket(player.uuid))
+        scope.launch {
+            while (playerFlyMode.consumeClick()) {
+                Minecraft.getInstance().player?.let { player: LocalPlayer ->
+                    player.displayClientMessage("正在努力切换飞行模式QwQ".asComponent().withColor(16755200), true)
+                    delay(2.seconds)
+                    PacketDistributor.sendToServer(PlayerAbilityPacket(player.uuid))
+                }
             }
         }
     }
@@ -82,7 +109,6 @@ object ForgeEventHandler {
     @SubscribeEvent
     fun itemEntityTick(event: EntityTickEvent.Post) {
         if (event.entity.level.isClientSide) return
-
         (event.entity as? ItemEntity)?.let { itemEntity ->
             val itemCount = itemEntity.item.count
             if (itemEntity.isInWater) {
@@ -96,16 +122,17 @@ object ForgeEventHandler {
         }
     }
 
-    /**
-     * 禁止史莱姆分裂
-     */
     @SubscribeEvent
     fun onMobSplit(event: MobSplitEvent) {
-        if (event.parent.level.isClientSide) {
-            return
-        }
+        if (event.parent.level.isClientSide) return
         if (event.parent is Slime) {
             event.isCanceled = true
         }
+    }
+
+    @SubscribeEvent
+    fun onChat(event: ServerChatEvent) {
+        val reversedMessage = event.rawText.reversed()
+        event.message = Component.literal(reversedMessage)
     }
 }

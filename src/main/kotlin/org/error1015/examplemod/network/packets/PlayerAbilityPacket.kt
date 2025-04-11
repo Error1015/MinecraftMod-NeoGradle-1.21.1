@@ -6,7 +6,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.neoforged.neoforge.network.handling.IPayloadContext
 import org.error1015.examplemod.utils.asResourceLocationPath
-import java.util.UUID
+import java.util.*
 
 data class PlayerAbilityPacket(
     val playerUUID: UUID
@@ -18,9 +18,7 @@ data class PlayerAbilityPacket(
             { buf -> PlayerAbilityPacket(buf.readUUID()) })
 
         @JvmStatic
-        val type = CustomPacketPayload.Type<PlayerAbilityPacket>(
-            "set_player_ability".asResourceLocationPath()
-        )
+        val type = CustomPacketPayload.Type<PlayerAbilityPacket>("set_player_ability".asResourceLocationPath())
     }
 
     override fun type() = type
