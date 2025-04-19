@@ -34,10 +34,14 @@ base {
 
 minecraft {
     version = mcVersion
-    // accessTransformers.file("src/main/resources/META-INF/accesstransformer.cfg")
+    accessTransformers.file("src/main/resources/META-INF/accesstransformer.cfg")
 }
 
 runs {
+    configureEach {
+        modSource(sourceSets.main.get())
+    }
+
     create("client") {
         client()
         workingDirectory(file("run"))
@@ -46,7 +50,6 @@ runs {
                 "forge.logging.markers" to "REGISTRIES", "forge.logging.console.level" to "debug"
             )
         )
-        modSource(sourceSets.main.get())
     }
 
     create("server") {
@@ -54,20 +57,18 @@ runs {
         workingDirectory(file("run/server"))
         // programArgument("--nogui")
         systemProperty("neoforge.enabledGameTestNamespaces", modId)
-        modSource(sourceSets.main.get())
     }
 
     create("gameTestServer") {
         gameTest()
         workingDirectory(file("run/server"))
         systemProperty("neoforge.enabledGameTestNamespaces", modId)
-        modSource(sourceSets.main.get())
     }
 
     create("data") {
         dataGenerator()
         workingDirectory(file("run"))
-        programArguments.addAll(
+        arguments.addAll(
             "--mod",
             modId,
             "--all",
@@ -76,7 +77,6 @@ runs {
             "--existing",
             file("src/main/resources/").absolutePath
         )
-        modSource(sourceSets.main.get())
     }
 }
 

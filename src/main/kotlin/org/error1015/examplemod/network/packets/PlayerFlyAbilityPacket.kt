@@ -8,17 +8,17 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 import org.error1015.examplemod.utils.asResourceLocationPath
 import java.util.*
 
-data class PlayerAbilityPacket(
+data class PlayerFlyAbilityPacket(
     val playerUUID: UUID
 ) : CustomPacketPayload {
     companion object {
         @JvmStatic
-        val CODEC: StreamCodec<FriendlyByteBuf, PlayerAbilityPacket> = StreamCodec.of(
+        val CODEC: StreamCodec<FriendlyByteBuf, PlayerFlyAbilityPacket> = StreamCodec.of(
             { buf, packet -> buf.writeUUID(packet.playerUUID) },
-            { buf -> PlayerAbilityPacket(buf.readUUID()) })
+            { buf -> PlayerFlyAbilityPacket(buf.readUUID()) })
 
         @JvmStatic
-        val type = CustomPacketPayload.Type<PlayerAbilityPacket>("set_player_ability".asResourceLocationPath())
+        val type = CustomPacketPayload.Type<PlayerFlyAbilityPacket>("set_player_ability".asResourceLocationPath)
     }
 
     override fun type() = type
@@ -29,6 +29,7 @@ data class PlayerAbilityPacket(
             server.execute {
                 val player = server.playerList.getPlayer(playerUUID) ?: return@execute
                 player.abilities.mayfly = !player.abilities.mayfly
+
                 player.onUpdateAbilities()
 
                 val text = when (player.abilities.mayfly) {

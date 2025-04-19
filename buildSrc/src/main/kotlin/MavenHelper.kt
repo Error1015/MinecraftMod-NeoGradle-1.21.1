@@ -26,7 +26,6 @@ val RepositoryHandler.modrinthMaven
         name = "Modrinth Maven"
     }
 
-
 fun RepositoryHandler.maven(url: String, block: MavenArtifactRepository.() -> Unit): MavenArtifactRepository = maven {
     setUrl(url)
     block()

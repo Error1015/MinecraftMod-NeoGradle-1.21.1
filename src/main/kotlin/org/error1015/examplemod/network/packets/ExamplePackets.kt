@@ -24,13 +24,13 @@ data class ExamplePackets(
         )
 
         @JvmStatic
-        val type = CustomPacketPayload.Type<ExamplePackets>("example_packet".asResourceLocationPath())
+        val type = CustomPacketPayload.Type<ExamplePackets>("example_packet".asResourceLocationPath)
     }
 
     override fun type() = type
 
     fun handle(ctx: IPayloadContext) {
         val (str, int, bool) = this
-        ctx.player().sendSystemMessage("收到数据包: 聊天信息: $str, 信息长度: $int, 事件是否被取消 $bool".asComponent())
+        ctx.player().sendSystemMessage("收到数据包: 聊天信息: $str, 信息长度: $int, 事件是否被取消 $bool".asComponent)
     }
 }

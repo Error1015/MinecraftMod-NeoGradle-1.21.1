@@ -1,12 +1,7 @@
 package org.error1015.examplemod.utils
 
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
-
-val Entity.level: Level
-    get() = level()
-
 
 fun Entity.spawn() {
     level().addFreshEntity(this)

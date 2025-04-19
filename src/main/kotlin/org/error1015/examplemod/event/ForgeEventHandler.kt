@@ -1,12 +1,6 @@
 package org.error1015.examplemod.event
 
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import net.minecraft.client.Minecraft
+import kotlinx.coroutines.*
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
@@ -32,7 +26,7 @@ import net.neoforged.neoforge.network.PacketDistributor
 import org.error1015.examplemod.MODID
 import org.error1015.examplemod.event.KeyMappingRegister.playerFlyMode
 import org.error1015.examplemod.network.packets.ExamplePackets
-import org.error1015.examplemod.network.packets.PlayerAbilityPacket
+import org.error1015.examplemod.network.packets.PlayerFlyAbilityPacket
 import org.error1015.examplemod.utils.*
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.toVec3
 import kotlin.time.Duration.Companion.seconds
@@ -69,10 +63,10 @@ object ForgeEventHandler {
     fun onClientTick(event: ClientTickEvent.Post) {
         scope.launch {
             while (playerFlyMode.consumeClick()) {
-                Minecraft.getInstance().player?.let { player: LocalPlayer ->
-                    player.displayClientMessage("正在努力切换飞行模式QwQ".asComponent().withColor(16755200), true)
+                MinecraftInstance.player?.let { player: LocalPlayer ->
+                    player.displayClientMessage("正在努力切换飞行模式QwQ".asComponent.withColor(16755200), true)
                     delay(2.seconds)
-                    PacketDistributor.sendToServer(PlayerAbilityPacket(player.uuid))
+                    PacketDistributor.sendToServer(PlayerFlyAbilityPacket(player.uuid))
                 }
             }
         }
@@ -108,7 +102,7 @@ object ForgeEventHandler {
      */
     @SubscribeEvent
     fun itemEntityTick(event: EntityTickEvent.Post) {
-        if (event.entity.level.isClientSide) return
+        if (event.entity.level().isClientSide) return
         (event.entity as? ItemEntity)?.let { itemEntity ->
             val itemCount = itemEntity.item.count
             if (itemEntity.isInWater) {
@@ -124,9 +118,9 @@ object ForgeEventHandler {
 
     @SubscribeEvent
     fun onMobSplit(event: MobSplitEvent) {
-        if (event.parent.level.isClientSide) return
+        if (event.parent.level().isClientSide) return
         if (event.parent is Slime) {
-            event.isCanceled = true
+            event.cancel
         }
     }
 
