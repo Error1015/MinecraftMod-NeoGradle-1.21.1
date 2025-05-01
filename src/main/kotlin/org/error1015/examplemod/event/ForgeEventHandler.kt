@@ -4,12 +4,15 @@ import kotlinx.coroutines.*
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Slime
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.Level
@@ -19,6 +22,7 @@ import net.neoforged.neoforge.client.event.ClientChatEvent
 import net.neoforged.neoforge.client.event.ClientTickEvent
 import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.living.MobSplitEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.tick.EntityTickEvent
@@ -128,5 +132,21 @@ object ForgeEventHandler {
     fun onChat(event: ServerChatEvent) {
         val reversedMessage = event.rawText.reversed()
         event.message = Component.literal(reversedMessage)
+    }
+
+    @SubscribeEvent
+    fun onPlayerDamage(event: LivingDamageEvent.Pre) {
+        event.handleServer {
+            event.source.entity.safeClassCastAndHandle<Player> { player ->
+                if (player.displayName?.string == "Dev") {
+                    event.newDamage = event.originalDamage * 114514
+                }
+                player.displayClientMessage(
+                    "你对 ${event.entity.feedbackDisplayName.string} 造成了 ${event.newDamage} 点伤害".asComponent.withColor(
+                        16755200
+                    ), true
+                )
+            }
+        }
     }
 }

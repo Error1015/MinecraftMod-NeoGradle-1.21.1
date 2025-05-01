@@ -1,12 +1,13 @@
-package org.error1015.examplemod.event
+package org.error1015.examplemod.client
 
 import net.minecraft.world.item.Rarity
+import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.RenderTooltipEvent
 import org.error1015.examplemod.MODID
 
-@EventBusSubscriber(modid = MODID)
+@EventBusSubscriber(modid = MODID, value = [Dist.CLIENT])
 object TooltipRenderEventHandler {
     @SubscribeEvent
     fun renderTooltipColor(event: RenderTooltipEvent.Color) {

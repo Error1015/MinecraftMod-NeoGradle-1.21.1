@@ -15,10 +15,10 @@ object RegisterEventHandler {
 
     @SubscribeEvent
     fun registerDataResource(event: DataPackRegistryEvent.NewRegistry) {
-        /*
+/*
         event.dataPackRegistry<Spell>(
             ModRegistries.SpellRegistryKey, Spell.CODEC, Spell.CODEC
         )
-         */
+*/
     }
 }

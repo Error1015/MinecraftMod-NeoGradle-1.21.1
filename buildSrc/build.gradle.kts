@@ -15,9 +15,7 @@ dependencies {
 }
 
 tasks.test {
-    this?.let {
-        useJUnitPlatform()
-    }
+    useJUnitPlatform()
 }
 
 kotlin {

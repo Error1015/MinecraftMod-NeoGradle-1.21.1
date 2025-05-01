@@ -28,9 +28,7 @@ val kffVersion = "5.7.0"
 version = modVersion
 group = modGroup
 
-base {
-    archivesName = modName
-}
+base.archivesName = modName
 
 minecraft {
     version = mcVersion
