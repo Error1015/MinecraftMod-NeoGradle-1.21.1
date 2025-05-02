@@ -20,7 +20,11 @@ object TooltipRenderEventHandler {
         }
     }
 
-    private fun RenderTooltipEvent.Color.setColor(borderStart: Long, borderEnd: Long, background: Long) {
+    private fun RenderTooltipEvent.Color.setColor(
+        borderStart: Long,
+        borderEnd: Long,
+        background: Long
+    ) {
         this.borderStart = borderStart.toInt()
         this.borderEnd = borderEnd.toInt()
         this.setBackground(background.toInt())

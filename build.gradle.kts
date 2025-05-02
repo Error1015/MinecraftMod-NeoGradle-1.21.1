@@ -23,7 +23,7 @@ val neoVersionRange = project.property("neo_version_range") as String
 val loaderVersionRange = project.property("loader_version_range") as String
 val parchmentVersion = project.property("parchment_version") as String
 // 依赖信息
-val kffVersion = "5.7.0"
+val kffVersion: String by project
 
 version = modVersion
 group = modGroup
@@ -67,13 +67,7 @@ runs {
         dataGenerator()
         workingDirectory(file("run"))
         arguments.addAll(
-            "--mod",
-            modId,
-            "--all",
-            "--output",
-            file("src/generated/resources/").absolutePath,
-            "--existing",
-            file("src/main/resources/").absolutePath
+            "--mod", modId, "--all", "--output", file("src/generated/resources/").absolutePath, "--existing", file("src/main/resources/").absolutePath
         )
     }
 }

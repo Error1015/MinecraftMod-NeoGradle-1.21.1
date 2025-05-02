@@ -12,11 +12,20 @@ import net.minecraft.world.item.component.Unbreakable
 import org.error1015.examplemod.items.tiers.ExampleTier
 
 object ExampleSwordItem : SwordItem(
-    ExampleTier, Properties().stacksTo(1).durability(1000).attributes(
-        createAttributes(ExampleTier, ExampleTier.attackDamageBonus, -2.4f)
-    ).component(DataComponents.UNBREAKABLE, Unbreakable(true))
+    ExampleTier, Properties()
+        .stacksTo(1)
+        .durability(1000)
+        .attributes(
+            createAttributes(ExampleTier, ExampleTier.attackDamageBonus, -2.4f)
+        )
+        .component(DataComponents.UNBREAKABLE, Unbreakable(true))
 ) {
-    override fun interactLivingEntity(stack: ItemStack, player: Player, interactionTarget: LivingEntity, usedHand: InteractionHand): InteractionResult {
+    override fun interactLivingEntity(
+        stack: ItemStack,
+        player: Player,
+        interactionTarget: LivingEntity,
+        usedHand: InteractionHand
+    ): InteractionResult {
         if (player.level().isClientSide) return InteractionResult.PASS
 
         if (usedHand == InteractionHand.MAIN_HAND && stack.item is ExampleSwordItem && interactionTarget is Creeper) {

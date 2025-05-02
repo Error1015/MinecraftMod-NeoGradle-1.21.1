@@ -1,5 +1,6 @@
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
+import org.jetbrains.kotlin.gradle.plugin.mpp.resources.AssembleHierarchicalResourcesTask
 
 val RepositoryHandler.mavenKff
     get() = maven("https://thedarkcolour.github.io/KotlinForForge/") {
@@ -26,7 +27,7 @@ val RepositoryHandler.modrinthMaven
         name = "Modrinth Maven"
     }
 
-inline fun RepositoryHandler.maven(url: String, crossinline block: MavenArtifactRepository.() -> Unit): MavenArtifactRepository = maven {
+private inline fun RepositoryHandler.maven(url: String, crossinline block: MavenArtifactRepository.() -> Unit): MavenArtifactRepository = maven {
     setUrl(url)
     block()
 }

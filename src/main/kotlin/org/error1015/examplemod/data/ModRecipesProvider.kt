@@ -9,9 +9,13 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.world.item.Items
 import java.util.concurrent.CompletableFuture
 
-class ModRecipesProvider(output: PackOutput, registries: CompletableFuture<HolderLookup.Provider>) : RecipeProvider(output, registries) {
+class ModRecipesProvider(
+    output: PackOutput,
+    registries: CompletableFuture<HolderLookup.Provider>
+) : RecipeProvider(output, registries) {
     override fun buildRecipes(recipeOutput: RecipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.DIAMOND, 2)
+        ShapedRecipeBuilder
+            .shaped(RecipeCategory.MISC, Items.DIAMOND, 2)
             .pattern("A")
             .pattern("A")
             .pattern("A")

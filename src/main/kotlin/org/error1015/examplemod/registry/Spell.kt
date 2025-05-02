@@ -1,10 +1,28 @@
 package org.error1015.examplemod.registry
 
-import net.minecraft.network.chat.Component
-import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.network.codec.StreamCodec
-import org.error1015.examplemod.MODID
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 
 data class Spell(
-    val name: String, var minCost: Int, var maxCost: Int, var description: Component = Component.translatable("spell.$MODID.$name.desc")
-)
+    val name: String,
+    var minCost: Int,
+    var maxCost: Int,
+) {
+    companion object {
+        val CODEC = RecordCodecBuilder.create { instance ->
+            instance
+                .group(
+                    Codec.STRING
+                        .fieldOf("name")
+                        .forGetter(Spell::name),
+                    Codec.INT
+                        .optionalFieldOf("minCost", 0)
+                        .forGetter(Spell::minCost),
+                    Codec.INT
+                        .optionalFieldOf("maxCost", 0)
+                        .forGetter(Spell::maxCost),
+                )
+                .apply(instance, ::Spell)
+        }
+    }
+}

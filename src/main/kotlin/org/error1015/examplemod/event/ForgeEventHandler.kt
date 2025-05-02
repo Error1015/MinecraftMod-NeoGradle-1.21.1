@@ -1,36 +1,28 @@
 package org.error1015.examplemod.event
 
 import kotlinx.coroutines.*
-import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Slime
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.ClientChatEvent
-import net.neoforged.neoforge.client.event.ClientTickEvent
 import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.living.MobSplitEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.tick.EntityTickEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import org.error1015.examplemod.MODID
-import org.error1015.examplemod.event.KeyMappingRegister.playerFlyMode
 import org.error1015.examplemod.network.packets.ExamplePackets
-import org.error1015.examplemod.network.packets.PlayerFlyAbilityPacket
 import org.error1015.examplemod.utils.*
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.toVec3
 import kotlin.time.Duration.Companion.seconds
@@ -61,22 +53,6 @@ object ForgeEventHandler {
     }
 
     /**
-     * 检测客户端按键点击
-     */
-    @SubscribeEvent
-    fun onClientTick(event: ClientTickEvent.Post) {
-        scope.launch {
-            while (playerFlyMode.consumeClick()) {
-                MinecraftInstance.player?.let { player: LocalPlayer ->
-                    player.displayClientMessage("正在努力切换飞行模式QwQ".asComponent.withColor(16755200), true)
-                    delay(2.seconds)
-                    PacketDistributor.sendToServer(PlayerFlyAbilityPacket(player.uuid))
-                }
-            }
-        }
-    }
-
-    /**
      * 右键钻石闪电攻击附近32x32x32的区块实体 并设置天气为雷雨
      */
     @SubscribeEvent
@@ -85,17 +61,24 @@ object ForgeEventHandler {
         val itemStack = event.itemStack ?: return
         if (itemStack.item == Items.DIAMOND) {
             val entities = event.entity.getNearbyEntities<LivingEntity>(32.0)
-            entities.forEach { entity ->
-                entity.hurt(event.level.damageSources().playerAttack(event.entity), entity.health)
+            entities.forEach { livingEntity ->
+                livingEntity.hurt(
+                    event.level
+                        .damageSources()
+                        .playerAttack(event.entity), livingEntity.health
+                )
                 val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, event.level)
-                lightning.setPos(entity.blockPosition().toVec3())
+                lightning.setPos(
+                    livingEntity
+                        .blockPosition()
+                        .toVec3()
+                )
                 lightning.spawn()
             }
 
             if (Math.random() < 0.1) {
                 (event.level as? ServerLevel)?.setWeatherParameters(0, 20.min, true, true) ?: return
             }
-
             event.entity.cooldowns.addCooldown(itemStack.item, 5.s)
             event.itemStack.count--
         }
@@ -106,16 +89,20 @@ object ForgeEventHandler {
      */
     @SubscribeEvent
     fun itemEntityTick(event: EntityTickEvent.Post) {
-        if (event.entity.level().isClientSide) return
-        (event.entity as? ItemEntity)?.let { itemEntity ->
-            val itemCount = itemEntity.item.count
-            if (itemEntity.isInWater) {
-                if (itemEntity.item.item == Items.DIAMOND) {
-                    itemEntity.level().explode(
-                        itemEntity, itemEntity.x, itemEntity.y, itemEntity.z, itemCount.toFloat(), false, Level.ExplosionInteraction.NONE
-                    ).explode()
+        event.handleServer {
+            event.entity.safeClassCastAndHandle<ItemEntity> { itemEntity ->
+                val itemCount = itemEntity.item.count
+                if (itemEntity.isInWater) {
+                    if (itemEntity.item.item == Items.DIAMOND) {
+                        itemEntity
+                            .level()
+                            .explode(
+                                itemEntity, itemEntity.x, itemEntity.y, itemEntity.z, itemCount.toFloat(), false, Level.ExplosionInteraction.NONE
+                            )
+                            .explode()
+                        itemEntity.remove(Entity.RemovalReason.KILLED)
+                    }
                 }
-                itemEntity.remove(Entity.RemovalReason.KILLED)
             }
         }
     }
@@ -134,19 +121,19 @@ object ForgeEventHandler {
         event.message = Component.literal(reversedMessage)
     }
 
-    @SubscribeEvent
-    fun onPlayerDamage(event: LivingDamageEvent.Pre) {
-        event.handleServer {
-            event.source.entity.safeClassCastAndHandle<Player> { player ->
-                if (player.displayName?.string == "Dev") {
-                    event.newDamage = event.originalDamage * 114514
-                }
-                player.displayClientMessage(
-                    "你对 ${event.entity.feedbackDisplayName.string} 造成了 ${event.newDamage} 点伤害".asComponent.withColor(
-                        16755200
-                    ), true
-                )
-            }
-        }
-    }
+    // @SubscribeEvent
+    // fun onPlayerAttackLivingEntity(event: LivingDamageEvent.Pre) {
+    //     event.handleServer {
+    //         event.source.entity.safeClassCastAndHandle<Player> { player ->
+    //             if (player.displayName?.string == "Dev") {
+    //                 event.newDamage = event.originalDamage * 114514
+    //             }
+    //             player.displayClientMessage(
+    //                 "你对 ${event.entity.feedbackDisplayName.string} 造成了 ${event.newDamage} 点伤害".asComponent.withColor(
+    //                     16755200
+    //                 ), true
+    //             )
+    //         }
+    //     }
+    // }
 }

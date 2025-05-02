@@ -2,7 +2,6 @@ package org.error1015.examplemod.registry
 
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
-import net.neoforged.neoforge.registries.DataPackRegistryEvent
 import net.neoforged.neoforge.registries.NewRegistryEvent
 import org.error1015.examplemod.MODID
 
@@ -13,12 +12,8 @@ object RegisterEventHandler {
         event.register(ModRegistries.SpellRegistry)
     }
 
-    @SubscribeEvent
-    fun registerDataResource(event: DataPackRegistryEvent.NewRegistry) {
-/*
-        event.dataPackRegistry<Spell>(
-            ModRegistries.SpellRegistryKey, Spell.CODEC, Spell.CODEC
-        )
-*/
-    }
+    // @SubscribeEvent
+    // fun registerDataResource(event: DataPackRegistryEvent.NewRegistry) {
+    //     event.dataPackRegistry(ModRegistries.SpellRegistryKey, Spell.CODEC, Spell.CODEC)
+    // }
 }
