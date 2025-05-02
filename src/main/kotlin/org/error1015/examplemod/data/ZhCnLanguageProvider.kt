@@ -5,7 +5,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider
 import org.error1015.examplemod.MODID
 import org.error1015.examplemod.items.ModItems
 
-class ZhCnLanguageDataGen(output: PackOutput) : LanguageProvider(
+class ZhCnLanguageProvider(output: PackOutput) : LanguageProvider(
     output, MODID, "zh_cn"
 ) {
     override fun addTranslations() {

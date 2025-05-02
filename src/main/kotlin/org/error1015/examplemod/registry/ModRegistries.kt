@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceKey
 import net.neoforged.neoforge.registries.RegistryBuilder
 import org.error1015.examplemod.utils.asResourceLocationPath
 
-
 object ModRegistries {
     val SpellRegistryKey: ResourceKey<Registry<Spell>> = ResourceKey.createRegistryKey(
         "spells".asResourceLocationPath

@@ -67,13 +67,7 @@ runs {
         dataGenerator()
         workingDirectory(file("run"))
         arguments.addAll(
-            "--mod",
-            modId,
-            "--all",
-            "--output",
-            file("src/generated/resources/").absolutePath,
-            "--existing",
-            file("src/main/resources/").absolutePath
+            "--mod", modId, "--all", "--output", file("src/generated/resources/").absolutePath, "--existing", file("src/main/resources/").absolutePath
         )
     }
 }
@@ -148,6 +142,10 @@ publishing {
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
+}
+
+tasks.withType<JavaExec> {
+    jvmArgs("-Dfile.encoding=UTF-8", "-Dsun.stdout.encoding=UTF-8", "-Dsun.stderr.encoding=UTF-8")
 }
 
 idea {

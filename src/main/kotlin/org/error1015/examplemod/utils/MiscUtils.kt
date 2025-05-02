@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.component.Tool
 import net.neoforged.bus.api.ICancellableEvent
 import net.neoforged.neoforge.event.entity.EntityEvent
 import org.error1015.examplemod.ExampleMod.logger
@@ -33,7 +34,7 @@ inline fun <reified T> Any?.safeClassCastAndHandle(block: (T) -> Unit) {
     }
 }
 
-inline fun <E : EntityEvent> E.handleClient(clientBLock: () -> Unit) {
+inline fun <E : EntityEvent> E.handleClient(clientBLock: E.() -> Unit) {
     if (this.entity.level().isClientSide) {
         clientBLock()
     }
@@ -44,3 +45,5 @@ inline fun <E : EntityEvent> E.handleServer(serverBlock: E.() -> Unit) {
         serverBlock()
     }
 }
+
+operator fun Tool.plus(theOther: Tool) = Tool(this.rules + theOther.rules, this.defaultMiningSpeed + theOther.defaultMiningSpeed, this.damagePerBlock + theOther.damagePerBlock)
