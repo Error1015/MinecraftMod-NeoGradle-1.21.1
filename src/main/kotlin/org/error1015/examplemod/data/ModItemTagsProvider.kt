@@ -21,9 +21,5 @@ class ModItemTagsProvider(
         tag(ItemTags.AXES).add(
             ModItems.ExampleSuperTool
         )
-
-        tag(ItemTags.PICKAXES).add(
-            ModItems.ExampleSuperTool
-        )
     }
 }

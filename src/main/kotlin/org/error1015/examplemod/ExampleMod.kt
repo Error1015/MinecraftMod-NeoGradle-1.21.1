@@ -16,8 +16,8 @@ const val MODID = "examplemod"
 object ExampleMod {
     val logger: Logger = LogManager.getLogger("$MODID-Main")
 
-    val toJsonObject = MySerializedThing(name = "ExampleMod", version = "1.0.0")
-    val json = Json.encodeToString(toJsonObject)
+    val testObject = MySerializedThing(name = "ExampleMod", version = "1.0.0")
+    val json = Json.encodeToString(testObject)
 
     init {
         ITEMS.register(MOD_BUS)
@@ -26,7 +26,4 @@ object ExampleMod {
 }
 
 @Serializable
-data class MySerializedThing(
-    val name: String,
-    val version: String
-)
+data class MySerializedThing(val name: String, val version: String)
