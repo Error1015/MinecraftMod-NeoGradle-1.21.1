@@ -15,6 +15,6 @@ inline fun <reified T> Entity.getNearbyEntities(radius: Double): List<T> where T
     return level()
         .getEntitiesOfClass(T::class.java, aabb)
         .asSequence()
-        .filter { it != this }
+        .filter { it != this && it != null }
         .toList()
 }

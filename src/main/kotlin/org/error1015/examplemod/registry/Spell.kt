@@ -9,7 +9,7 @@ data class Spell(
     var maxCost: Int,
 ) {
     companion object {
-        val CODEC = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<Spell> = RecordCodecBuilder.create { instance ->
             instance
                 .group(
                     Codec.STRING

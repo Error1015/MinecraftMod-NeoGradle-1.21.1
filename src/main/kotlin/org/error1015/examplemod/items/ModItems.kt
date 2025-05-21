@@ -1,8 +1,11 @@
 package org.error1015.examplemod.items
 
+import net.minecraft.core.Holder
+import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredRegister
 import org.error1015.examplemod.MODID
+import org.error1015.examplemod.items.armors.ModArmorMaterials
 import org.error1015.examplemod.items.misc.MyShearsItem
 import org.error1015.examplemod.items.swords.ExampleSwordItem
 import org.error1015.examplemod.items.tiers.ExampleTier
@@ -18,4 +21,6 @@ object ModItems {
     val ExampleSword: Item by ITEMS.registerItem("example_sword") { ExampleSwordItem }
     val ExamplePickAxe: Item by ITEMS.registerItem("example_pickaxe") { ExamplePickAxeItem }
     val ExampleSuperTool: Item by ITEMS.registerItem("example_super_tool") { ExampleSuperToolItem(ExampleTier) }
+
+    val exampleHelmet: ArmorItem by ITEMS.registerItem("example_helmet") { ArmorItem(ModArmorMaterials.exampleArmorMaterial, ArmorItem.Type.HELMET, Item.Properties()) }
 }

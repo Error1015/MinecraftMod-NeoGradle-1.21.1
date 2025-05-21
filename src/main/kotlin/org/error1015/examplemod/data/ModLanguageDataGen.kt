@@ -8,38 +8,34 @@ import org.error1015.examplemod.items.ModItems
 class ModLanguageDataGen(
     val output: PackOutput
 ) {
-    val zh_cn = ZhCnLanguageProvider()
-    val en_us = EnUsLanguageProvider()
+    val zhCn = ZhCnLanguageProvider()
+    val enUs = EnUsLanguageProvider()
 
-    inner class ZhCnLanguageProvider : LanguageProvider(
-        output, MODID, "zh_cn"
+    inner class ZhCnLanguageProvider : AbstractModLanguageProvider(
+        output, "zh_cn"
     ) {
-        override fun addTranslations() {
-            this.addItems()
-            this.addCommonKeys()
-        }
-
-        private fun addItems() {
+        override fun addItems() {
             add(ModItems.ExampleItem, "ExampleItem")
         }
 
-        private fun addCommonKeys() {
+        override fun addBlocks() {
+        }
+
+        override fun addKeys() {
             add("examplemod_keymappings", "Example Mod Keys")
             add("player_fly_mode", "飞行模式")
         }
     }
 
-    inner class EnUsLanguageProvider : LanguageProvider(output, MODID, "en_us") {
-        override fun addTranslations() {
-            this.addItems()
-            this.addCommonKeys()
-        }
-
-        private fun addItems() {
+    inner class EnUsLanguageProvider : AbstractModLanguageProvider(output, "en_us") {
+        override fun addItems() {
             add(ModItems.ExampleItem, "ExampleItem")
         }
 
-        private fun addCommonKeys() {
+        override fun addBlocks() {
+        }
+
+        override fun addKeys() {
             add("examplemod_keymappings", "Example Mod Keys")
             add("player_fly_mode", "Flying Mode")
         }

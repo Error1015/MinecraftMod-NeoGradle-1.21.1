@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.HoeItem
 import net.minecraft.world.item.component.ItemAttributeModifiers
 import org.error1015.examplemod.items.tiers.ExampleTier
-import org.error1015.examplemod.utils.asPath
+import org.error1015.examplemod.utils.asResourceLocationPath
 
 object ExampleHoeItem : HoeItem(
     ExampleTier, Properties()
@@ -16,7 +16,7 @@ object ExampleHoeItem : HoeItem(
             ItemAttributeModifiers(
                 listOf(
                     ItemAttributeModifiers.Entry(
-                        Attributes.MAX_HEALTH, AttributeModifier("max_health".asPath, 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND
+                        Attributes.MAX_HEALTH, AttributeModifier("max_health".asResourceLocationPath, 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND
                     )
                 ), false
             )

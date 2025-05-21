@@ -1,6 +1,5 @@
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.jetbrains.kotlin.gradle.plugin.mpp.resources.AssembleHierarchicalResourcesTask
 
 val RepositoryHandler.mavenKff
     get() = maven("https://thedarkcolour.github.io/KotlinForForge/") {

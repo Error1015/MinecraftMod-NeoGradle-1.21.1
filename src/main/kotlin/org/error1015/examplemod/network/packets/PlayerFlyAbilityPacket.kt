@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.neoforged.neoforge.network.handling.IPayloadContext
-import org.error1015.examplemod.utils.asPath
+import org.error1015.examplemod.utils.asResourceLocationPath
 import java.util.*
 
 data class PlayerFlyAbilityPacket(
@@ -16,7 +16,7 @@ data class PlayerFlyAbilityPacket(
         val CODEC: StreamCodec<FriendlyByteBuf, PlayerFlyAbilityPacket> = StreamCodec.of({ buf, packet -> buf.writeUUID(packet.playerUUID) }, { buf -> PlayerFlyAbilityPacket(buf.readUUID()) })
 
         @JvmStatic
-        val type = CustomPacketPayload.Type<PlayerFlyAbilityPacket>("set_player_ability".asPath)
+        val type = CustomPacketPayload.Type<PlayerFlyAbilityPacket>("set_player_ability".asResourceLocationPath)
     }
 
     override fun type() = type

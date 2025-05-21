@@ -6,7 +6,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.neoforged.neoforge.network.handling.IPayloadContext
 import org.error1015.examplemod.utils.asComponent
-import org.error1015.examplemod.utils.asPath
+import org.error1015.examplemod.utils.asResourceLocationPath
 
 data class ExamplePackets(
     val string: String,
@@ -20,7 +20,7 @@ data class ExamplePackets(
         )
 
         @JvmStatic
-        val type = CustomPacketPayload.Type<ExamplePackets>("example_packet".asPath)
+        val type = CustomPacketPayload.Type<ExamplePackets>("example_packet".asResourceLocationPath)
     }
 
     override fun type() = type

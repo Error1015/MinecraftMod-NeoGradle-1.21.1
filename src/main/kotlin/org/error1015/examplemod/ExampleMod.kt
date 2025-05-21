@@ -22,8 +22,12 @@ object ExampleMod {
     init {
         ITEMS.register(MOD_BUS)
         BLOCKS.register(MOD_BUS)
+        ModCreativeTab.builder.register(MOD_BUS)
     }
 }
 
 @Serializable
-data class MySerializedThing(val name: String, val version: String)
+data class MySerializedThing(
+    val name: String,
+    val version: String
+)
