@@ -12,11 +12,11 @@ import org.error1015.examplemod.items.ModItems
 import org.error1015.examplemod.utils.asResourceLocationPath
 
 object ModArmorMaterials {
-    val registries: DeferredRegister<ArmorMaterial> = DeferredRegister.create(BuiltInRegistries.ARMOR_MATERIAL, MODID)
+    val registrar: DeferredRegister<ArmorMaterial> = DeferredRegister.create(BuiltInRegistries.ARMOR_MATERIAL, MODID)
 
     val layer: ArmorMaterial.Layer = ArmorMaterial.Layer("example".asResourceLocationPath)
 
-    val exampleArmorMaterial: Holder<ArmorMaterial> = registries.register("example_material") { ->
+    val exampleArmorMaterial: Holder<ArmorMaterial> = registrar.register("example_material") { ->
         ArmorMaterial(
             mapOf<ArmorItem.Type, Int>(
                 ArmorItem.Type.BOOTS to 2, ArmorItem.Type.LEGGINGS to 5, ArmorItem.Type.CHESTPLATE to 7, ArmorItem.Type.HELMET to 3

@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import org.error1015.examplemod.block.blockentity.MyBlockEntity
 
-object MyBlockEntityRender: BlockEntityRenderer<MyBlockEntity> {
+object MyBlockEntityRender : BlockEntityRenderer<MyBlockEntity> {
     /*
     此方法每帧调用一次，以便渲染 block 实体。参数包括：
     - blockEntity： 正在渲染的方块实体实例
@@ -22,6 +22,5 @@ object MyBlockEntityRender: BlockEntityRenderer<MyBlockEntity> {
         bufferSource: MultiBufferSource,
         packedLight: Int,
         packedOverlay: Int
-    ) {
-    }
+    ) {}
 }

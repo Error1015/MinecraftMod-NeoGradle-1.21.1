@@ -13,7 +13,10 @@ data class PlayerFlyAbilityPacket(
 ) : CustomPacketPayload {
     companion object {
         @JvmStatic
-        val CODEC: StreamCodec<FriendlyByteBuf, PlayerFlyAbilityPacket> = StreamCodec.of({ buf, packet -> buf.writeUUID(packet.playerUUID) }, { buf -> PlayerFlyAbilityPacket(buf.readUUID()) })
+        val CODEC: StreamCodec<FriendlyByteBuf, PlayerFlyAbilityPacket> = StreamCodec.of(
+            { buf, packet -> buf.writeUUID(packet.playerUUID) },
+            { buf -> PlayerFlyAbilityPacket(buf.readUUID()) }
+        )
 
         @JvmStatic
         val type = CustomPacketPayload.Type<PlayerFlyAbilityPacket>("set_player_ability".asResourceLocationPath)

@@ -4,9 +4,7 @@ import kotlinx.coroutines.*
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TextColor
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
@@ -30,7 +28,6 @@ import org.error1015.examplemod.utils.*
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component1
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component2
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component3
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.toVec3
 import kotlin.time.Duration.Companion.seconds
 
 @EventBusSubscriber(modid = MODID)
@@ -42,13 +39,13 @@ object ForgeEventHandler {
         })
 
     val ciallo: MutableComponent = "Ciallo～(∠・ω< )⌒☆".asComponent.withStyle(
-        Style.EMPTY.withColor(
+        EmptyStyle.withColor(
             TextColor.fromLegacyFormat(
                 ChatFormatting.GOLD
             )
-        ) + Style.EMPTY.withClickEvent(
-            ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.bilibili.com/video/BV1GJ411x7h7/?spm_id_from=333.337.search-card.all.click")
-        ) + Style.EMPTY.withUnderlined(true) + Style.EMPTY.withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "Ciallo～(∠・ω< )⌒☆"))
+        ) + EmptyStyle.withClickEvent(
+            ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.bilibili.com/video/BV1GJ411x7h7")
+        ) + EmptyStyle.withUnderlined(true) + EmptyStyle.withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "Ciallo～(∠・ω< )⌒☆"))
     )
 
     /**
@@ -76,24 +73,25 @@ object ForgeEventHandler {
         if (event.level.isClientSide) return
         val itemStack = event.itemStack ?: return
         if (itemStack.item == Items.DIAMOND) {
-            val entities = event.entity.getNearbyEntities<LivingEntity>(32.0)
-            entities.forEach { livingEntity ->
-                livingEntity.hurt(
-                    event.level
-                        .damageSources()
-                        .playerAttack(event.entity), livingEntity.health
-                )
-                LightningBolt(EntityType.LIGHTNING_BOLT, event.level).apply {
-                    setPos(livingEntity.blockPosition().toVec3())
-                    spawn()
+            event.entity
+                .getNearbyEntities<LivingEntity>(32.0)
+                .apply {
+                    forEach { livingEntity ->
+                        livingEntity.hurt(
+                            event.level
+                                .damageSources()
+                                .playerAttack(event.entity), livingEntity.health
+                        )
+                        LightningBolt(EntityType.LIGHTNING_BOLT, event.level).apply {
+                            spawnOnPos(livingEntity.blockPosition())
+                        }
+                    }
                 }
-            }
-            event.entity.sendSystemMessage(ciallo)
 
-            if (Math.random() < 0.1) {
-                (event.level as? ServerLevel)?.setWeatherParameters(0, 20.min, true, true) ?: return
+            event.entity.apply {
+                sendSystemMessage(ciallo)
+                cooldowns.addCooldown(itemStack.item, 5.s)
             }
-            event.entity.cooldowns.addCooldown(itemStack.item, 5.s)
             event.itemStack.count--
         }
     }
@@ -129,7 +127,7 @@ object ForgeEventHandler {
                     val (x, y, z) = blockPosition()
                     // 检测物品是否是食物
                     if (item.getFoodProperties(null) != null) {
-                        setPos(x.toDouble(), (y + 5).toDouble(), z.toDouble())
+                        setPos(x, y + 5, z)
                     }
                 }
             }

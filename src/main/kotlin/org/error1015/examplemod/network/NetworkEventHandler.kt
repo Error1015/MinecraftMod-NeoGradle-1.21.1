@@ -14,8 +14,9 @@ object NetworkEventHandler {
      */
     @SubscribeEvent
     fun onNetworkRegister(event: RegisterPayloadHandlersEvent) {
-        val registrar = event.registrar("1.0") ?: return
-        registrar.playToServer(PlayerFlyAbilityPacket.type, PlayerFlyAbilityPacket.CODEC, PlayerFlyAbilityPacket::handle)
-        registrar.playToServer(ExamplePackets.type, ExamplePackets.CODEC, ExamplePackets::handle)
+        event.registrar("1.0").apply {
+            playToServer(PlayerFlyAbilityPacket.type, PlayerFlyAbilityPacket.CODEC, PlayerFlyAbilityPacket::handle)
+            playToServer(ExamplePackets.type, ExamplePackets.CODEC, ExamplePackets::handle)
+        }
     }
 }

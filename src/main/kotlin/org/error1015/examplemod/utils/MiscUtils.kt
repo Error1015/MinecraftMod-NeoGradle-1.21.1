@@ -19,6 +19,8 @@ internal val String.asComponent: MutableComponent get() = Component.literal(this
 
 internal val String.asTranslatableComponent: MutableComponent get() = Component.translatable(this)
 
+val EmptyStyle: Style get() = Style.EMPTY
+
 operator fun Style.plus(another: Style): Style = this.applyTo(another)
 
 fun ICancellableEvent.cancel() {

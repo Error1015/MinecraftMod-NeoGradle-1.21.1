@@ -8,6 +8,5 @@ import thedarkcolour.kotlinforforge.neoforge.forge.getValue
 object ModBlocks {
     val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(MODID)
 
-    val exampleBlock: Block by BLOCKS.register("example_block") { -> MyBlock
-}
+    val exampleBlock: Block by BLOCKS.register("example_block") { -> MyBlock }
 }

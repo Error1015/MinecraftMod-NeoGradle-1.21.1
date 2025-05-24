@@ -22,5 +22,5 @@ object ModItems {
     val ExamplePickAxe: Item by ITEMS.registerItem("example_pickaxe") { ExamplePickAxeItem }
     val ExampleSuperTool: Item by ITEMS.registerItem("example_super_tool") { ExampleSuperToolItem(ExampleTier) }
 
-    val exampleHelmet: ArmorItem by ITEMS.registerItem("example_helmet") { ArmorItem(ModArmorMaterials.exampleArmorMaterial, ArmorItem.Type.HELMET, Item.Properties()) }
+    val exampleHelmet: ArmorItem by ITEMS.registerItem("example_helmet") { ArmorItem(ModArmorMaterials.exampleArmorMaterial, ArmorItem.Type.HELMET, Item.Properties().stacksTo(1)) }
 }

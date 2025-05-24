@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.error1015.examplemod.block.ModBlocks.BLOCKS
 import org.error1015.examplemod.items.ModItems.ITEMS
+import org.error1015.examplemod.items.armors.ModArmorMaterials
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 const val MODID = "examplemod"
@@ -23,6 +24,7 @@ object ExampleMod {
         ITEMS.register(MOD_BUS)
         BLOCKS.register(MOD_BUS)
         ModCreativeTab.builder.register(MOD_BUS)
+        ModArmorMaterials.registrar.register(MOD_BUS)
     }
 }
 
